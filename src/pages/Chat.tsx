@@ -109,7 +109,7 @@ const getSystemResponse = async (userInput: string): Promise<string> => {
         {/* Header */}
         <div className="px-3 py-2 sm:px-6 sm:py-3 border-b bg-white flex-shrink-0">
           <h1 className="text-lg sm:text-2xl font-semibold text-gray-900">
-            Happy - AI
+            Happy Support- AI
           </h1>
           <p className="text-xs sm:text-sm text-gray-600 mt-0.5">
             Get instant help for orders, payments & reports
