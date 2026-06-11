@@ -30,18 +30,20 @@ This is the frontend half of the happy-ops reference project — see `happy-ops-
 
 | | |
 |---|---|
-| Framework | React 18 + Vite |
-| Language | TypeScript |
+| Framework | React 18 + Vite 5 |
+| Language | TypeScript 5.5 |
 | Styling | Tailwind CSS + shadcn/ui |
 | Markdown | react-markdown + remark-gfm |
 | Syntax highlighting | react-syntax-highlighter (One Dark) |
-| HTTP | fetch (native) |
+| HTTP | fetch (native) + axios |
+| Auth | Keycloak (keycloak-js) |
+| Data fetching | TanStack Query v5 |
 
 ---
 
 ## Prerequisites
 
-- Node.js 18+ or [Bun](https://bun.sh)
+- Node.js 18+
 - `happy-ops-service` running (see its README for setup)
 
 ---
@@ -51,12 +53,7 @@ This is the frontend half of the happy-ops reference project — see `happy-ops-
 ```bash
 git clone https://github.com/your-org/happy-ops-portal.git
 cd happy-ops-portal
-```
-
-**Install dependencies:**
-```bash
-bun install
-# or: npm install
+npm install
 ```
 
 **Point the UI at your backend:**
@@ -67,12 +64,11 @@ Open `src/api/AiApis.ts` and update the service URL:
 const url = `http://localhost:8080/chat`;
 ```
 
-Replace `localhost:8080` with wherever `happy-ops-service` is running.
+Replace with wherever `happy-ops-service` is running.
 
 **Start the dev server:**
 ```bash
-bun dev
-# or: npm run dev
+npm run dev
 ```
 
 Open [http://localhost:5173](http://localhost:5173)
@@ -85,11 +81,11 @@ The portal makes a single API call:
 
 ```
 POST {SERVICE_URL}/chat
-Body: { "message": "your question" }
+Body:     { "message": "your question" }
 Response: { "response": "agent reply" }
 ```
 
-Make sure `happy-ops-service` is running and CORS is enabled (it is by default). If you're running both locally, no additional config is needed beyond matching the port.
+Make sure `happy-ops-service` is running and CORS is enabled (it is by default).
 
 ---
 
@@ -98,33 +94,42 @@ Make sure `happy-ops-service` is running and CORS is enabled (it is by default).
 ```
 src/
 ├── pages/
-│   └── Chat.tsx        # Main chat page — all UI logic lives here
+│   └── Chat.tsx              # Main chat page — all UI logic lives here
 ├── api/
-│   └── AiApis.ts       # Single function that calls POST /chat
+│   └── AiApis.ts             # POST /chat wrapper
 ├── types/
-│   └── aiChatMessage.ts # Request/response types
-├── components/ui/      # shadcn/ui component library
+│   └── aiChatMessage.ts      # Request/response types
+├── lib/
+│   ├── formatters.ts         # Currency and date formatting utilities
+│   └── utils.ts              # Tailwind class merging (cn)
 ├── hooks/
-│   └── use-mobile.tsx  # Responsive breakpoint hook
-└── App.tsx             # Router setup (single route: /)
+│   └── use-mobile.tsx        # Responsive breakpoint hook
+├── components/ui/            # shadcn/ui component library
+└── App.tsx                   # Router setup (single route: /)
 ```
+
+---
+
+## Available Scripts
+
+| Command | Description |
+|---|---|
+| `npm run dev` | Start dev server (binds to all interfaces) |
+| `npm run build` | Production build → `dist/` |
+| `npm run build:dev` | Development build |
+| `npm run lint` | Run ESLint |
+| `npm run preview` | Preview the production build locally |
 
 ---
 
 ## Building for Production
 
 ```bash
-bun run build
+npm run build
 # Output in dist/
 ```
 
 The build is a static site — deploy to any CDN (Vercel, Netlify, S3 + CloudFront, etc.). Make sure the production service URL is set correctly in `AiApis.ts` before building.
-
----
-
-## Screenshot
-
-> _Add a screenshot of the chat interface here_
 
 ---
 
